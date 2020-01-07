@@ -1,3 +1,6 @@
+[![Ansible Galaxy](https://img.shields.io/badge/galaxy-tobias__richter.tasmota-45712.svg)](https://galaxy.ansible.com/tobias_richter/tasmota)
+[![Build Status](https://travis-ci.org/tobias-richter/ansible-tasmota.svg?branch=master)](https://travis-ci.org/tobias-richter/ansible-tasmota)
+
 # tobias_richter.tasmota
 
 This role allows you to configure tasmota devices by executing commands.
