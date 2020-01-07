@@ -1,0 +1,4 @@
+- name: test role syntax
+  hosts: test
+  roles:
+    - ansible-tasmota

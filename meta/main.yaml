@@ -1,0 +1,9 @@
+galaxy_info:
+  role_name: tasmota
+  author: Tobias Richter
+  description: Ansible role for managing tasmota devices by executing commands.
+  license: Apache
+  min_ansible_version: 2.7
+
+  galaxy_tags:
+    - tasmota

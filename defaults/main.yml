@@ -1,0 +1,14 @@
+tasmota_commands: []
+# examples:
+# set teleperiod to 10 seconds
+# - command: TelePeriod
+#   value: 10
+# extend teleperiod to 3600 seconds when switch is turned off, set do default when switch is turned on
+# - command: Rule1
+#   value: "on Power1#state=0 do TelePeriod 3600 endon on Power1#state=1 do TelePeriod 1 endon"
+# enable the rule
+# - command: Rule1
+#   value: 1
+# enable one shot for the rule
+# - command: Rule1
+#   value: 5
