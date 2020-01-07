@@ -3,8 +3,17 @@
 
 # tobias_richter.tasmota
 
+https://img.shields.io/badge/galaxy-tobias_richter.tasmota-45712.svg?style=flat
+
 This role allows you to configure tasmota devices by executing commands.
-See https://tasmota.github.io/docs/#/Commands for a command list.
+
+:bulb: See https://tasmota.github.io/docs/#/Commands for a command list.
+
+This role/action_plugin will do the following steps for each provided `command`,`value` pair in the `tasmota_commands`:
+* It will retrieve the current setting of the provided `command`
+* It will compare the result of this with the incoming `value`
+  * when the new value differs from the existing value the command is executed with the new value and the task will report with `changed`
+  * when there is no change detected the command will not execute the command (this will avoid restarts on several commands) 
 
 ## Requirements
 
