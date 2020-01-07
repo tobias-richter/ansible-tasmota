@@ -1,7 +1,7 @@
 ---
 language: python
 cache: pip
-python: "2.7"
+python: "3.7"
 env:
   # run against latest version
   - ANSIBLE_VERSION=latest
@@ -19,7 +19,7 @@ addons:
 
 install:
   # Install ansible and dependencies
-  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible ansible-lint --upgrade; else pip install ansible=="$ANSIBLE_VERSION" ansible-lint --upgrade; fi
+  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible ansible-lint requests  --upgrade; else pip install ansible=="$ANSIBLE_VERSION" ansible-lint requests --upgrade; fi
 
   # Check ansible version
   - ansible --version
