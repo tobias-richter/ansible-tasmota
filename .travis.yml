@@ -19,7 +19,8 @@ addons:
 
 install:
   # Install ansible and dependencies
-  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible ansible-lint requests  --upgrade; else pip install ansible=="$ANSIBLE_VERSION" ansible-lint requests --upgrade; fi
+  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible --upgrade; else pip install ansible=="$ANSIBLE_VERSION" --upgrade; fi
+  - pip install ansible-lint requests --upgrade
 
   # Check ansible version
   - ansible --version
