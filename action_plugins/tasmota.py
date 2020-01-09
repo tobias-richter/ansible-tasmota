@@ -55,7 +55,7 @@ class ActionModule(ActionBase):
             # Get the tasmota host
             tasmota_host = self._get_arg_or_var('tasmota_host', task_vars['ansible_host'])
             command = self._get_arg_or_var('command')
-            incoming_value = str(self._get_arg_or_var('value'))
+            incoming_value = self._get_arg_or_var('value')
 
         except Exception as err:
             display.v("got an exception: %s" % (err))
@@ -70,7 +70,7 @@ class ActionModule(ActionBase):
         # get response data
         data = status_response.json()
         display.v("data: %s" % (data))
-        existing_value = str(data.get(command))
+        existing_value = unicode(data.get(command))
 
         if (command.startswith('Rule')):
             display.vv("rule found!")
