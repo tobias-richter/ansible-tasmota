@@ -7,6 +7,7 @@ __metaclass__ = type
 
 import requests
 import json
+import sys
 
 from ansible.module_utils._text import to_native
 from ansible.plugins.action import ActionBase
@@ -17,6 +18,9 @@ try:
 except ImportError:
     from ansible.utils.display import Display
     display = Display()
+
+if sys.version_info[0] >= 3:
+    unicode = str
 
 class ActionModule(ActionBase):
     TRANSFERS_FILES = False
