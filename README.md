@@ -37,11 +37,11 @@ This may cause wrong reported "changed" states. You are welcome to create a PR f
 
 Available variables are listed below, along with their default values:
 
-        tasmota_user: username
-        tasmota_password: password
+        tasmota_user: '' 
+        tasmota_password: ''
         tasmota_commands: []
    
-If tasmota_user and tasmota password are both defined, they will be included in the commands to authenticate access.
+If tasmota_user and tasmota password are both non empty, they will be included in the commands to authenticate access.
 
 Tasmota commands contains list of tasmota commands to be executed.
 Each tasmota_command is defined as:
