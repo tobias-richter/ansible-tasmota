@@ -9,7 +9,8 @@ This role allows you to configure tasmota devices by executing commands.
 
 :bulb: See https://tasmota.github.io/docs/#/Commands for a command list.
 
-This role/action_plugin will do the following steps for each provided `command`,`value` pair in the `tasmota_commands`:
+This role/action_plugin will send commands to a tasmota device using web requests.
+It will perform the following steps for each provided `command`,`value` pair in the `tasmota_commands`:
 * It will retrieve the current setting of the provided `command`
 * It will compare the result of this with the incoming `value`
   * when the new value differs from the existing value the command is executed with the new value and the task will report with `changed`
@@ -36,10 +37,13 @@ This may cause wrong reported "changed" states. You are welcome to create a PR f
 
 Available variables are listed below, along with their default values:
 
-    tasmota_commands: []
-    
-A list of tasmota commands to execute.
+        tasmota_user: username
+	tasmota_password: password
+	tasmota_commands: []
+   
+If tasmota_user and tasmota password are both defined, they will be included in the commands to authenticate access.
 
+Tasmota commands contains list of tasmota commands to be executed.
 Each tasmota_command is defined as:
 
     - command: <COMMAND>

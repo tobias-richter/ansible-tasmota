@@ -8,6 +8,7 @@ __metaclass__ = type
 import requests
 import json
 import sys
+import copy
 
 from ansible.module_utils._text import to_native
 from ansible.plugins.action import ActionBase
@@ -66,8 +67,18 @@ class ActionModule(ActionBase):
             display.v("got an exception: "+err.message)
             return self._fail_result(result, "error during retrieving parameter '%s'" % (err.message))
 
+        auth_params = {}
+        try:
+            user = self._get_arg_or_var("tasmota_user")
+            password = self._get_arg_or_var('tasmota_password')
+            auth_params = { 'user' : user, 'password' : password }
+            display.v("authentication parameters: %s" % (auth_params))
+        except:
+            pass
+
         endpoint_uri = "http://%s/cm" % (tasmota_host)
-        status_params = {'cmnd' : command }
+        status_params = copy.deepcopy(auth_params)
+        status_params.update( {'cmnd' : command } )
 
         # execute command
         status_response = requests.get(url = endpoint_uri, params = status_params)
@@ -98,12 +109,11 @@ class ActionModule(ActionBase):
 
         display.v("[%s] command: %s, existing_value: '%s', incoming_value: '%s'" % (tasmota_host, command, existing_value, incoming_value))
 
-
-
         display.v("[%s] existing_uri: %s" % (tasmota_host, endpoint_uri))
         if existing_value != incoming_value:
             changed = True
-            change_params = { 'cmnd' : ("%s %s" % (command, incoming_value)) }
+            change_params = copy.deepcopy(auth_params)
+            change_params.update( { 'cmnd' : ("%s %s" % (command, incoming_value)) } )
             change_response = requests.get(url = endpoint_uri, params = change_params)
 
         result["changed"] = changed
