@@ -38,8 +38,8 @@ This may cause wrong reported "changed" states. You are welcome to create a PR f
 Available variables are listed below, along with their default values:
 
         tasmota_user: username
-	tasmota_password: password
-	tasmota_commands: []
+        tasmota_password: password
+        tasmota_commands: []
    
 If tasmota_user and tasmota password are both defined, they will be included in the commands to authenticate access.
 
