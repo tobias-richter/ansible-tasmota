@@ -1,3 +1,5 @@
+tasmota_user: '' 
+tasmota_password: ''
 tasmota_commands: []
 # examples:
 # set teleperiod to 10 seconds
