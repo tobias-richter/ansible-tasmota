@@ -12,7 +12,7 @@ import copy
 
 from ansible.module_utils._text import to_native
 from ansible.plugins.action import ActionBase
-from ansible.errors import AnsibleOptionsError
+from ansible.errors import AnsibleOptionsError, AnsibleAuthenticationFailure, AnsibleRuntimeError
 
 try:
     from __main__ import display
@@ -84,7 +84,19 @@ class ActionModule(ActionBase):
         status_response = requests.get(url = endpoint_uri, params = status_params)
         # get response data
         data = status_response.json()
-        display.v("data: %s" % (data))
+        display.v("data: %s, response code: %s" % (data, status_response.status_code))
+
+        warnings = []
+        resp_warn = data.get("WARNING")
+        if resp_warn:
+            # Prior to v8.2.3 authorization error has 200 ok status
+            if status_response.status_code == 401 or resp_warn == "Need user=<username>&password=<password>":
+                raise AnsibleAuthenticationFailure("Missing/Invalid credentials")
+            warnings.append(resp_warn)
+
+        if status_response.status_code != 200:
+            raise AnsibleRuntimeError("Unexpected response code: %s" % (status_response.status_code))
+
         existing_value = unicode(data.get(command))
 
         if (command.startswith('Rule')):
@@ -115,6 +127,10 @@ class ActionModule(ActionBase):
             change_params = copy.deepcopy(auth_params)
             change_params.update( { 'cmnd' : ("%s %s" % (command, incoming_value)) } )
             change_response = requests.get(url = endpoint_uri, params = change_params)
+
+        if warnings:
+            display.warning(warnings)
+            result["warning"] = warnings
 
         result["changed"] = changed
         result["command"] = command
