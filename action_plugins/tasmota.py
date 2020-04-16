@@ -106,6 +106,10 @@ class ActionModule(ActionBase):
             existing_value = self._translateResultStr(existing_value)
         elif (command.startswith('PowerRetain')):
             existing_value = self._translateResultStr(existing_value)
+        elif (command == 'Module'):
+            modules_ids = data.get(command).keys()
+            existing_value = next(iter(modules_ids))
+
 
         display.v("[%s] command: %s, existing_value: '%s', incoming_value: '%s'" % (tasmota_host, command, existing_value, incoming_value))
 
