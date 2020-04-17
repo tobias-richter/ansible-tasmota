@@ -121,7 +121,8 @@ class ActionModule(ActionBase):
         elif (command == 'Module'):
             modules_ids = data.get(command).keys()
             existing_value = next(iter(modules_ids))
-
+        elif (command == 'Template'):
+            existing_value = data
 
         display.v("[%s] command: %s, existing_value: '%s', incoming_value: '%s'" % (tasmota_host, command, existing_value, incoming_value))
 
