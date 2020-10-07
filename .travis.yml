@@ -5,8 +5,6 @@ python: "3.7"
 env:
   # run against latest version
   - ANSIBLE_VERSION=latest
-  # run against minimal required version
-  - ANSIBLE_VERSION=2.7.*
 
 # Use the new container infrastructure
 sudo: false
@@ -19,7 +17,7 @@ addons:
 
 install:
   # Install ansible and dependencies
-  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible --upgrade; else pip install ansible=="$ANSIBLE_VERSION" --upgrade; fi
+  - pip install ansible --upgrade
   - pip install ansible-lint requests --upgrade
 
   # Check ansible version
