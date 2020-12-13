@@ -16,7 +16,8 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  lint:
+    name: lint and syntax-check
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -45,5 +46,13 @@ jobs:
         with:
           targets: "./"
 
+      - name: Run syntax-check
+        uses: dawidd6/action-ansible-playbook@3c534b3ba0bcbbee2b13fb45226f71acbaca2a76
+        with:
+          # Ansible playbook filepath
+          playbook: tests/test.yml
+          requirements: tests/requirements.yml
+          inventory: tests/inventory
+          key: --syntax-check
 
         
