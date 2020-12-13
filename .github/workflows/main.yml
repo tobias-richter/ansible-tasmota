@@ -20,7 +20,7 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   lint:
-    name: lint and syntax-check
+    name: ansible-lint and syntax-check
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -64,5 +64,10 @@ jobs:
           directory: "${{ env.ROLE_NAME }}"
           requirements: tests/requirements.yml
           options: --syntax-check -i tests/inventory
+
+      - name: ansible-galaxy
+        uses: robertdebock/galaxy-action@affc5472cd0b08f64a51eafba49b08898c1bbeb8
+        with:
+          galaxy_api_key: ${{ secrets.GALAXY_API_KEY }}
 
         
