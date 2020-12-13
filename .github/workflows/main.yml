@@ -55,6 +55,6 @@ jobs:
           playbook: tests/test.yml
           requirements: tests/requirements.yml
           inventory: tests/inventory
-          options: --syntax-check -vvv
+          options: --syntax-check -vvvvvvv
 
         
