@@ -30,7 +30,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          path: "$ROLE_NAME"
+          path: "${{ env.ROLE_NAME }}"
       
       - name: Cache PIP
         uses: actions/cache@v2
