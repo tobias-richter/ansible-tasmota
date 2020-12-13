@@ -46,7 +46,7 @@ jobs:
       - name: ansible-lint
         uses: ansible/ansible-lint-action@594402913bf720b74acd144d220f25693c61e4fa
         with:
-          targets: "./"
+          targets: "."
 
       - name: Run syntax-check
         uses: dawidd6/action-ansible-playbook@3c534b3ba0bcbbee2b13fb45226f71acbaca2a76
