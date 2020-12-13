@@ -5,28 +5,23 @@ name: CI
 env:
   ROLE_NAME: tasmota
 
-# Controls when the action will run. 
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  create:
+    tags:
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   lint:
     name: ansible-lint and syntax-check
-    # The type of runner that the job will run on
+
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -59,15 +54,20 @@ jobs:
       - name: ansible-playbook syntax check
         uses: dawidd6/action-ansible-playbook@3c534b3ba0bcbbee2b13fb45226f71acbaca2a76
         with:
-          # Ansible playbook filepath
           playbook: tests/test.yml
           directory: "${{ env.ROLE_NAME }}"
           requirements: tests/requirements.yml
           options: --syntax-check -i tests/inventory
 
-      - name: ansible-galaxy
-        uses: robertdebock/galaxy-action@affc5472cd0b08f64a51eafba49b08898c1bbeb8
-        with:
-          galaxy_api_key: ${{ secrets.GALAXY_API_KEY }}
+  galaxy:
+    name: ansible-galaxy
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: import
+      uses: robertdebock/galaxy-action@affc5472cd0b08f64a51eafba49b08898c1bbeb8
+      with:
+        galaxy_api_key: ${{ secrets.GALAXY_API_KEY }}
 
         
