@@ -1,0 +1,2 @@
+# This role needs to have the following PIP components installed
+requests
