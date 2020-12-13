@@ -60,7 +60,8 @@ jobs:
           options: --syntax-check -i tests/inventory
 
   galaxy:
-    name: ansible-galaxy
+    name: ansible-galaxy import
+    needs: [lint]
     runs-on: ubuntu-latest
 
     steps:
