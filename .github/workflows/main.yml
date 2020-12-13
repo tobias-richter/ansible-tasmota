@@ -53,6 +53,6 @@ jobs:
           playbook: tests/test.yml
           requirements: tests/requirements.yml
           inventory: tests/inventory
-          key: --syntax-check
+          options: --syntax-check
 
         
