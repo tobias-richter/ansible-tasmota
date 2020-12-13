@@ -31,12 +31,19 @@ jobs:
       - name: Pip Installer
         uses: BSFishy/pip-action@v1
         with:
-          packages: requests
-          upgrade: true
+          requirements: requirements.txt
 
       - name: ansible-lint
         uses: ansible/ansible-lint-action@v4.1.0
         with:
-          targets: tests/test.yml
+          targets: |
+            targets: ./**/*.yml
+          
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
         
         
