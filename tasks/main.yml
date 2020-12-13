@@ -6,9 +6,7 @@
 
 - name: extra long name extra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long name
   debug:
-    msg: test
-
-
+    msg: extra long name extra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long name extra long name extra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long name
 
 
 
