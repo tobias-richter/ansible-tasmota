@@ -3,13 +3,3 @@
     command: "{{ item.command }}"
     value: "{{ item.value }}"
   with_items: "{{ tasmota_commands }}"
-
-- name: extra long name extra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long name
-  debug:
-    msg: extra long name extra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long name extra long name extra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long nameextra long name
-
-
-
-
-
-
