@@ -41,7 +41,7 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: ansible-lint
-        uses: ansible/ansible-lint-action@v4.1.0
+        uses: ansible/ansible-lint-action@594402913bf720b74acd144d220f25693c61e4fa
         with:
           targets: "./"
 
