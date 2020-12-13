@@ -57,6 +57,7 @@ jobs:
         with:
           # Ansible playbook filepath
           playbook: tests/test.yml
+          directory: tobias_richter.tasmota
           requirements: tests/requirements.yml
           options: --syntax-check -i tests/inventory
 
