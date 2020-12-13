@@ -43,10 +43,10 @@ jobs:
       - name: Install role requirements
         uses: BSFishy/pip-action@v1
         with:
-          requirements: "$ROLE_NAME/requirements.txt"
+          requirements: "${{ env.ROLE_NAME }}/requirements.txt"
 
       - name: Create ansible.cfg
-        run: "printf '[defaults]\nroles_path=./tests/requirements/:../' > $ROLE_NAME/ansible.cfg"
+        run: "printf '[defaults]\nroles_path=./tests/requirements/:../' > ${{ env.ROLE_NAME }}/ansible.cfg"
 
       - name: ansible-lint
         # replace "master" with any valid ref
@@ -54,14 +54,14 @@ jobs:
         with:
           targets: |
             $ROLE_NAME
-          args: "-c $ROLE_NAME/.ansible-lint"
+          args: "-c ${{ env.ROLE_NAME }}/.ansible-lint"
 
       - name: ansible-playbook syntax check
         uses: dawidd6/action-ansible-playbook@3c534b3ba0bcbbee2b13fb45226f71acbaca2a76
         with:
           # Ansible playbook filepath
           playbook: tests/test.yml
-          directory: "$ROLE_NAME"
+          directory: "${{ env.ROLE_NAME }}"
           requirements: tests/requirements.yml
           options: --syntax-check -i tests/inventory
 
