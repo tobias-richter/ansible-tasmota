@@ -17,7 +17,7 @@ on:
 
 jobs:
   lint:
-    name: ansible-lint and syntax-check
+    name: lint & syntax check
 
     runs-on: ubuntu-latest
 
