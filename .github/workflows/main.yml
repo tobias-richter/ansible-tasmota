@@ -24,27 +24,27 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      - name: Create ansible.cfg
-        run: printf '[defaults]\nroles_path=./tests/requirements/:../' > ansible.cfg
-
-      - name: Pip Installer
-        uses: BSFishy/pip-action@v1
-        with:
-          requirements: requirements.txt
-
-      - uses: actions/cache@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Cache PIP
+        uses: actions/cache@v2
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-
-      - name: ansible-lint
-        uses: ansible/ansible-lint-action@594402913bf720b74acd144d220f25693c61e4fa
+            
+      - name: Install role requirements
+        uses: BSFishy/pip-action@v1
         with:
-          targets: "./"
+          requirements: requirements.txt
+
+      - name: Create ansible.cfg
+        run: printf '[defaults]\nroles_path=./tests/requirements/:../' > ansible.cfg
+
+      - name: Run ansible-lint
+        run: ansible-lint .
 
       - name: Run syntax-check
         uses: dawidd6/action-ansible-playbook@3c534b3ba0bcbbee2b13fb45226f71acbaca2a76
@@ -52,7 +52,6 @@ jobs:
           # Ansible playbook filepath
           playbook: tests/test.yml
           requirements: tests/requirements.yml
-          inventory: tests/inventory
-          key: --syntax-check
+          options: --syntax-check -i tests/inventory
 
         
