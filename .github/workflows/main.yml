@@ -43,8 +43,13 @@ jobs:
       - name: Create ansible.cfg
         run: printf '[defaults]\nroles_path=./tests/requirements/:../' > ansible.cfg
 
-      - name: Run ansible-lint
-        run: ansible-lint .
+      - name: Lint Ansible Playbook
+        # replace "master" with any valid ref
+        uses: ansible/ansible-lint-action@594402913bf720b74acd144d220f25693c61e4fa
+        with:
+          targets: |
+            **/*.yml
+            **/*.yaml
 
       - name: Run syntax-check
         uses: dawidd6/action-ansible-playbook@3c534b3ba0bcbbee2b13fb45226f71acbaca2a76
