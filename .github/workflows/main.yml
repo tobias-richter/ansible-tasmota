@@ -27,7 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       
-      - name: Cache PÍP
+      - name: Cache PIP
         uses: actions/cache@v2
         with:
           path: ~/.cache/pip
