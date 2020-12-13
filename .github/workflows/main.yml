@@ -54,7 +54,6 @@ jobs:
           # Ansible playbook filepath
           playbook: tests/test.yml
           requirements: tests/requirements.yml
-          inventory: tests/inventory
-          options: --syntax-check -vvvvvvv
+          options: --syntax-check -i tests/inventory
 
         
