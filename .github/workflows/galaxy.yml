@@ -1,8 +1,5 @@
 name: Ansible Galaxy Import
 
-env:
-  ROLE_NAME: tasmota
-
 on:
   push:
     branches: [ master ]
@@ -12,7 +9,6 @@ on:
 jobs:
   galaxy:
     name: ansible-galaxy import
-    needs: [lint]
     runs-on: ubuntu-latest
 
     steps:
