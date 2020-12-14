@@ -11,8 +11,6 @@ on:
   create:
     tags:
 
-  workflow_dispatch:
-
 jobs:
   lint:
     name: lint & syntax check
