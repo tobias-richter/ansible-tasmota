@@ -1,4 +1,4 @@
-name: Ansible Galaxy Import
+name: Ansible Galaxy import
 
 on:
   push:
