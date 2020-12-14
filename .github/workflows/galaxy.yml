@@ -1,0 +1,26 @@
+name: galaxy import
+
+env:
+  ROLE_NAME: tasmota
+
+on:
+  push:
+    branches: [ master ]
+  create:
+    tags:
+
+  workflow_dispatch:
+
+jobs:
+  galaxy:
+    name: ansible-galaxy import
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: import
+        uses: robertdebock/galaxy-action@affc5472cd0b08f64a51eafba49b08898c1bbeb8
+        with:
+          galaxy_api_key: ${{ secrets.GALAXY_API_KEY }}
+
+        
