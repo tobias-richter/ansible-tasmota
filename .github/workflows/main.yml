@@ -1,4 +1,6 @@
-name: lint & syntax check
+# This is a basic workflow to help you get started with Actions
+
+name: lint, syntax check and import
 
 env:
   ROLE_NAME: tasmota
@@ -8,6 +10,8 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  create:
+    tags:
 
   workflow_dispatch:
 
@@ -54,5 +58,17 @@ jobs:
           directory: "${{ env.ROLE_NAME }}"
           requirements: tests/requirements.yml
           options: --syntax-check -i tests/inventory
+
+  galaxy:
+    name: ansible-galaxy import
+    needs: [lint]
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: import
+      uses: robertdebock/galaxy-action@affc5472cd0b08f64a51eafba49b08898c1bbeb8
+      with:
+        galaxy_api_key: ${{ secrets.GALAXY_API_KEY }}
 
         
