@@ -42,7 +42,7 @@ jobs:
         uses: ansible/ansible-lint-action@594402913bf720b74acd144d220f25693c61e4fa
         with:
           targets: |
-            $ROLE_NAME
+            ${{ env.ROLE_NAME }}
           args: "-c ${{ env.ROLE_NAME }}/.ansible-lint"
 
       - name: ansible-playbook syntax check
