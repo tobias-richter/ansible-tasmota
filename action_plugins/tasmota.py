@@ -121,7 +121,40 @@ class ActionModule(ActionBase):
         elif (command == 'Module'):
             modules_ids = data.get(command).keys()
             existing_value = next(iter(modules_ids))
+        elif (command == 'Template'):
+            existing_value = data
+        elif (command == 'TuyaMCU'):
+            # Return only relevant subset of fn/dp ids, ignoring the rest
+            try:
+                fn_id, dp_id = (int(x) for x in incoming_value.split(','))
+            except Exception as e:
+                raise AnsibleOptionsError("Invalid value '%s' for TuyaMCU: %s" % (incoming_value, e))
 
+            try:
+                def our_entry(x):
+                    return fn_id == x['fnId'] or dp_id == x['dpId']
+
+                relevant_entries = list(filter(our_entry, data['TuyaMCU']))
+                relevant_entries = ["%s,%s" % (x['fnId'], x['dpId']) for x in relevant_entries]
+            except KeyError as e:
+                raise AnsibleRuntimeError("Invalid response: %s, error: %s" % (data, e))
+
+            if dp_id != 0:
+                if len(relevant_entries) == 1:
+                    existing_value = relevant_entries[0]
+                else:
+                    existing_value = relevant_entries
+            else:
+                if not relevant_entries:
+                    # Missing entries equals to disabled entry
+                    existing_value = incoming_value
+                else:
+                    existing_value = relevant_entries
+        elif (command == 'DimmerRange'):
+            try:
+                existing_value = "%s,%s" % (data[command]['Min'],data[command]['Max'])
+            except Exception as e:
+                raise AnsibleRuntimeError("Invalid response payload: %s, error: %s" % (data, e))
 
         display.v("[%s] command: %s, existing_value: '%s', incoming_value: '%s'" % (tasmota_host, command, existing_value, incoming_value))
 
@@ -131,6 +164,8 @@ class ActionModule(ActionBase):
             change_params = copy.deepcopy(auth_params)
             change_params.update( { 'cmnd' : ("%s %s" % (command, incoming_value)) } )
             change_response = requests.get(url = endpoint_uri, params = change_params)
+            if status_response.status_code != 200:
+               raise AnsibleRuntimeError("Unexpected response code: %s" % (status_response.status_code))
 
         if warnings:
             display.warning(warnings)

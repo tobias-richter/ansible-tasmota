@@ -67,6 +67,22 @@ e.g.
       - command: Rule1
         value: 5
 
+        # set and enable template (not that template is not a string)
+      - command: Template
+        value: {NAME: FooModule, GPIO: [1,2272,1,2304,1,1,0,0,1,1,1,1,1,0], FLAG: 0, BASE: 54}
+      - command: Module
+        value: 0 # Template
+
+
+        # configure multiple TuyaMCU Functions (repeat for each fnId,dpId pair)
+      - command: TuyaMCU
+        value: 11,10
+      - command: TuyaMCU
+        value: 12,13
+
+        # make sure that TuyaMCU fnId is disabled or missing
+      - command: TuyaMCU
+        value: 11,0
 ## Tipps
 
 To avoid specifying `tasmota_commands` for each host using host_vars you can use a construct similar to this:
