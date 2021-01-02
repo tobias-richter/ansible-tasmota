@@ -3,3 +3,4 @@
     command: "{{ item.command }}"
     value: "{{ item.value }}"
   with_items: "{{ tasmota_commands }}"
+  when: item.value is defined and item.value
