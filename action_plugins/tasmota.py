@@ -123,6 +123,16 @@ class ActionModule(ActionBase):
             existing_value = next(iter(modules_ids))
         elif (command == 'Template'):
             existing_value = data
+        elif (command == 'TimeStd' or command == 'TimeDst' ):
+            display.vv("TimeStd/TimeDst found!");
+            existing_data = data.get(command);
+            existing_day = existing_data.get("Day");
+            existing_hemisphere = existing_data.get("Hemisphere");
+            existing_hour = existing_data.get("Hour");
+            existing_month = existing_data.get("Month");
+            existing_offset = existing_data.get("Offset");
+            existing_week = existing_data.get("Week");
+            existing_value = "%s,%s,%s,%s,%s,%s" % (existing_hemisphere, existing_week, existing_month, existing_day, existing_hour, existing_offset);
         elif (command == 'TuyaMCU'):
             # Return only relevant subset of fn/dp ids, ignoring the rest
             try:
