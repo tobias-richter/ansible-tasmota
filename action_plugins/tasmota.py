@@ -42,7 +42,7 @@ class ActionModule(ActionBase):
         #    import httplib as http_client
         #    http_client.HTTPConnection.debuglevel = 1
 ##
-        #import logging;
+        #import logging
         #logLevel = logging.DEBUG
         #logging.basicConfig()
         #logging.getLogger().setLevel(logLevel)
