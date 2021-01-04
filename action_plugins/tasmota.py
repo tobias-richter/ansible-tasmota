@@ -61,12 +61,22 @@ class ActionModule(ActionBase):
             # Get the tasmota host
             tasmota_host = self._get_arg_or_var('tasmota_host', task_vars['ansible_host'])
             command = self._get_arg_or_var('command')
-            incoming_value = self._get_arg_or_var('value')
+            incoming_value = self._get_arg_or_var('value', None, False)
 
         except Exception as err:
             display.v("got an exception: %s" % (err))
             display.v("got an exception: "+err.message)
             return self._fail_result(result, "error during retrieving parameter '%s'" % (err.message))
+
+        display.v("incoming_value %s" % (incoming_value))
+
+        if incoming_value is None:
+
+          # early return when incoming_value is not provided
+          result["changed"] = False
+          result["skipped"] = True
+
+          return result
 
         auth_params = {}
         try:
