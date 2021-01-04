@@ -63,6 +63,14 @@ class ActionModule(ActionBase):
             command = self._get_arg_or_var('command')
             incoming_value = self._get_arg_or_var('value', None, False)
 
+            if incoming_value is None:
+
+              # early return when incoming_value is not provided
+              result["changed"] = False
+              result["skipped"] = True
+
+              return result
+
         except Exception as err:
             display.v("got an exception: %s" % (err))
             display.v("got an exception: "+err.message)
@@ -70,13 +78,6 @@ class ActionModule(ActionBase):
 
         display.v("incoming_value %s" % (incoming_value))
 
-        if incoming_value is None:
-
-          # early return when incoming_value is not provided
-          result["changed"] = False
-          result["skipped"] = True
-
-          return result
 
         auth_params = {}
         try:
