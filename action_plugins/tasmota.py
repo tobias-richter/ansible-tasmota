@@ -191,7 +191,7 @@ class ActionModule(ActionBase):
 
             if not check_mode:
                 change_params = copy.deepcopy(auth_params)
-            change_params.update( { 'cmnd' : ("%s %s" % (command, incoming_value)) } )
+                change_params.update( { 'cmnd' : ("%s %s" % (command, incoming_value)) } )
                 change_response = requests.get(url = endpoint_uri, params = change_params)
                 if status_response.status_code != 200:
                     raise AnsibleRuntimeError("Unexpected response code: %s" % (status_response.status_code))
