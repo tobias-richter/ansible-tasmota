@@ -57,6 +57,9 @@ class ActionModule(ActionBase):
 
         display.v("args: %s" % (self._task.args))
 
+        check_mode = task_vars['ansible_check_mode']
+        display.v("check_mode: %s" % (check_mode))
+
         try:
             # Get the tasmota host
             tasmota_host = self._get_arg_or_var('tasmota_host', task_vars['ansible_host'])
@@ -185,11 +188,13 @@ class ActionModule(ActionBase):
         display.v("[%s] existing_uri: %s" % (tasmota_host, endpoint_uri))
         if existing_value != incoming_value:
             changed = True
-            change_params = copy.deepcopy(auth_params)
-            change_params.update( { 'cmnd' : ("%s %s" % (command, incoming_value)) } )
-            change_response = requests.get(url = endpoint_uri, params = change_params)
-            if status_response.status_code != 200:
-               raise AnsibleRuntimeError("Unexpected response code: %s" % (status_response.status_code))
+
+            if not check_mode:
+                change_params = copy.deepcopy(auth_params)
+                change_params.update( { 'cmnd' : ("%s %s" % (command, incoming_value)) } )
+                change_response = requests.get(url = endpoint_uri, params = change_params)
+                if status_response.status_code != 200:
+                    raise AnsibleRuntimeError("Unexpected response code: %s" % (status_response.status_code))
 
         if warnings:
             display.warning(warnings)
