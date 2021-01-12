@@ -137,7 +137,8 @@ class ActionModule(ActionBase):
             modules_ids = data.get(command).keys()
             existing_value = next(iter(modules_ids))
         elif (command.startswith('Gpio')):
-            existing_value = data.get(command.upper()).keys()[0]
+            gpios = data.get(command.upper()).keys()
+            existing_value = next(iter(gpios))
         elif (command == 'Template'):
             existing_value = data
         elif (command == 'TimeStd' or command == 'TimeDst' ):
