@@ -83,6 +83,12 @@ e.g.
         # make sure that TuyaMCU fnId is disabled or missing
       - command: TuyaMCU
         value: 11,0
+    
+        # Example for no_log
+      - command: MqttPassword
+        value: MySafePassword
+        no_log: True
+
 ## Tipps
 
 To avoid specifying `tasmota_commands` for each host using host_vars you can use a construct similar to this:
