@@ -38,8 +38,17 @@ Available variables are listed below, along with their default values:
         tasmota_user: '' 
         tasmota_password: ''
         tasmota_commands: []
+        tasmota_mqtt_user: ''
+        tasmota_mqtt_password: ''
+        tasmota_mqtt_host: ''
+        tasmota_mqtt_port: ''
+        tasmota_mqtt_client: ''
+        tasmota_mqtt_topic: ''
+        tasmota_mqtt_fulltopic: ''
    
-If tasmota_user and tasmota password are both non empty, they will be included in the commands to authenticate access.
+If tasmota_user and tasmota password are both non-empty, they will be included in the commands to authenticate access.
+
+If any of the mqtt configuration values is set, a single `Backlog` command will be issued automatically after running the commands.  
 
 Tasmota commands contains list of tasmota commands to be executed.
 Each tasmota_command is defined as:

@@ -1,5 +1,15 @@
 tasmota_user: '' 
 tasmota_password: ''
+
+# MQTT Configuration, is run in a single command (backlog) to prevent multiple restarts
+tasmota_mqtt_user: ''
+tasmota_mqtt_password: ''
+tasmota_mqtt_host: ''
+tasmota_mqtt_port: ''
+tasmota_mqtt_client: ''
+tasmota_mqtt_topic: ''
+tasmota_mqtt_fulltopic: ''
+
 tasmota_commands: []
 # examples:
 # set teleperiod to 10 seconds
