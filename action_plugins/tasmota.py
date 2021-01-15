@@ -10,6 +10,9 @@ import json
 import sys
 import copy
 
+from urllib3.util import Retry
+from requests.adapters import HTTPAdapter
+
 from ansible.module_utils._text import to_native
 from ansible.plugins.action import ActionBase
 from ansible.errors import AnsibleOptionsError, AnsibleAuthenticationFailure, AnsibleRuntimeError
@@ -92,6 +95,10 @@ class ActionModule(ActionBase):
             display.v("authentication parameters: %s" % (auth_params))
         except:
             pass
+
+        # Enable retries due to reboot of the devices
+        session = requests.Session()
+        session.mount("http://%s" % (tasmota_host), HTTPAdapter(Retry(total=5, backoff_factor=1.0)))
 
         endpoint_uri = "http://%s/cm" % (tasmota_host)
         status_params = copy.deepcopy(auth_params)
