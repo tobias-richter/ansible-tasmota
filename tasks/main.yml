@@ -9,6 +9,7 @@
     command: "Backlog"
     value: >
       MqttHost {{ tasmota_mqtt_host }};
+      MqttPort {{ tasmota_mqtt_port }};
       MqttUser {{ tasmota_mqtt_user }};
       MqttPassword {{ tasmota_mqtt_password }};
       MqttClient {{ tasmota_mqtt_client }};
