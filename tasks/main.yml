@@ -15,5 +15,8 @@
       MqttClient {{ tasmota_mqtt_client }};
       MqttTopic {{ tasmota_mqtt_topic }};
       MqttFullTopic {{ tasmota_mqtt_fulltopic }};
-  when: (tasmota_mqtt_user + tasmota_mqtt_password + tasmota_mqtt_host + tasmota_mqtt_port + tasmota_mqtt_client + tasmota_mqtt_topic + tasmota_mqtt_fulltopic) | length > 0
+  when: >
+    (tasmota_mqtt_user + tasmota_mqtt_password + tasmota_mqtt_host + tasmota_mqtt_port +
+    tasmota_mqtt_client + tasmota_mqtt_topic + tasmota_mqtt_fulltopic)
+    | length > 0
   no_log: true
