@@ -14,3 +14,7 @@ tasmota_commands: []
 # enable one shot for the rule
 # - command: Rule1
 #   value: 5
+# set MqttPassword to "MySafePassword" with no_log
+# - command: MqttPassword
+#   value: MySafePassword
+#   no_log: True
