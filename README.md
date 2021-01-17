@@ -16,9 +16,9 @@ It will perform the following steps for each provided `command`,`value` pair in 
 
 ## Requirements
 
-This role requires `requests` to be installed.
+This role requires some python requirements to be installed.
 
-    pip install requests
+    pip install -r requirements.txt
 
 ## Limitations
 
