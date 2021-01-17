@@ -57,8 +57,10 @@ class ActionModule(ActionBase):
 
         self._task_vars = task_vars
         changed = False
+        no_log = self._play_context.no_log
 
-        display.v("args: %s" % (self._task.args))
+        if not no_log:
+          display.v("args: %s" % (self._task.args))
 
         check_mode = task_vars['ansible_check_mode']
         display.v("check_mode: %s" % (check_mode))
@@ -82,8 +84,8 @@ class ActionModule(ActionBase):
             display.v("got an exception: "+err.message)
             return self._fail_result(result, "error during retrieving parameter '%s'" % (err.message))
 
-        display.v("incoming_value %s" % (incoming_value))
-
+        if not no_log:
+            display.v("incoming_value %s" % (incoming_value))
 
         auth_params = {}
         try:
@@ -191,7 +193,7 @@ class ActionModule(ActionBase):
             except Exception as e:
                 raise AnsibleRuntimeError("Invalid response payload: %s, error: %s" % (data, e))
 
-        display.v("[%s] command: %s, existing_value: '%s', incoming_value: '%s'" % (tasmota_host, command, existing_value, incoming_value))
+        display.v("[%s] command: %s, existing_value: '%s', incoming_value: '%s'" % (tasmota_host, command, existing_value, incoming_value if not no_log else ""))
 
         display.v("[%s] existing_uri: %s" % (tasmota_host, endpoint_uri))
         if existing_value != incoming_value:

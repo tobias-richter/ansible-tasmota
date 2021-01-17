@@ -2,6 +2,7 @@
   tasmota:
     command: "{{ item.command }}"
     value: "{{ item.value }}"
+  no_log: "{{ item.no_log | default(omit) }}"
   with_items: "{{ tasmota_commands }}"
 
 - name: "Setup MQTT."
