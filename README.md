@@ -92,6 +92,16 @@ e.g.
         # make sure that TuyaMCU fnId is disabled or missing
       - command: TuyaMCU
         value: 11,0
+
+        # Configure Timer16 to trigger a Rule once a day at 06:00 (+-0:05) to restart the device
+      - command: Timer16
+        value: '{"Enable":1,"Time":"06:00","Window":5,"Days":"1111111","Repeat":1,"Output":1,"Action":3, "Mode":0}'
+      - command: Rule3
+        value: "on Clock#Timer=16 do Restart 1 endon"
+      - command: Rule3
+        value: 1
+      - command: Timers
+        value: 1
     
         # Example for no_log
       - command: MqttPassword
