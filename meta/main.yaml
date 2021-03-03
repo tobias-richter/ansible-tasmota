@@ -7,15 +7,15 @@ galaxy_info:
   min_ansible_version: 2.7
 
   platforms:
-  - name: GenericBSD
-    versions:
-      - any
-  - name: GenericLinux
-    versions:
-      - any
-  - name: GenericUNIX
-    versions:
-      - any
+    - name: GenericBSD
+      versions:
+        - any
+    - name: GenericLinux
+      versions:
+        - any
+    - name: GenericUNIX
+      versions:
+        - any
 
   galaxy_tags:
     - tasmota
