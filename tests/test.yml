@@ -1,4 +1,5 @@
+---
 - name: test role syntax
   hosts: test
   roles:
-    - tasmota
+    - tobias_richter.tasmota

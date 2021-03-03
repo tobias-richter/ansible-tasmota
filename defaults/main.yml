@@ -1,4 +1,5 @@
-tasmota_user: '' 
+---
+tasmota_user: ''
 tasmota_password: ''
 
 # MQTT Configuration, is run in a single command (backlog) to prevent multiple restarts
