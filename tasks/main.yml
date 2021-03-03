@@ -1,3 +1,4 @@
+---
 - name: "Configure tasmota."
   tasmota:
     command: "{{ item.command }}"
