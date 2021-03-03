@@ -6,6 +6,7 @@ from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
 import requests
+import re
 import json
 import sys
 import copy
@@ -150,6 +151,10 @@ class ActionModule(ActionBase):
             existing_value = next(iter(gpios))
         elif (command == 'Template'):
             existing_value = data
+        elif (command.startswith('Timers')):
+            existing_value = self._translateResultStr(data.get('Timers'))
+        elif (re.findall('Timer\d', command)):
+            existing_value = data.get(command)
         elif (command == 'TimeStd' or command == 'TimeDst' ):
             display.vv("TimeStd/TimeDst found!")
             existing_data = data.get(command)
@@ -193,15 +198,21 @@ class ActionModule(ActionBase):
             except Exception as e:
                 raise AnsibleRuntimeError("Invalid response payload: %s, error: %s" % (data, e))
 
-        display.v("[%s] command: %s, existing_value: '%s', incoming_value: '%s'" % (tasmota_host, command, existing_value, incoming_value if not no_log else ""))
+        display.v("[%s] command: %s,\n\t existing_value: '%s',\n\t incoming_value: '%s'" % (tasmota_host, command, existing_value, incoming_value if not no_log else ""))
 
         display.v("[%s] existing_uri: %s" % (tasmota_host, endpoint_uri))
+
         if existing_value != incoming_value:
             changed = True
 
             if not check_mode:
                 change_params = copy.deepcopy(auth_params)
-                change_params.update( { 'cmnd' : ("%s %s" % (command, incoming_value)) } )
+                # encode json if required
+                if isinstance(incoming_value, dict):
+                    change_params.update( { 'cmnd' : ("%s %s" % (command, json.dumps(incoming_value))) } )
+                else:
+                    change_params.update( { 'cmnd' : ("%s %s" % (command, incoming_value)) } )
+
                 change_response = requests.get(url = endpoint_uri, params = change_params)
                 if status_response.status_code != 200:
                     raise AnsibleRuntimeError("Unexpected response code: %s" % (status_response.status_code))
