@@ -245,7 +245,7 @@ class ActionModule(ActionBase):
         if is_required and ret == None:
             raise AnsibleOptionsError("parameter %s is required" % name)
         else:
-            return ret
+            return str(ret)
 
     def _translateResultStr(self, translate, offValue = "0", onValue = "1"):
       if (translate == "OFF"):
