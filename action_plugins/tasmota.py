@@ -143,6 +143,8 @@ class ActionModule(ActionBase):
             existing_value = self._translateResultStr(existing_value)
         elif (command.startswith('PowerRetain')):
             existing_value = self._translateResultStr(existing_value)
+        elif (command.startswith('SensorRetain')):
+            existing_value = self._translateResultStr(existing_value)
         elif (command == 'Module'):
             modules_ids = data.get(command).keys()
             existing_value = next(iter(modules_ids))
