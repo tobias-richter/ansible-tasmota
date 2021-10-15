@@ -136,7 +136,7 @@ class ActionModule(ActionBase):
             elif incoming_value in ["4","5"]:
                 display.vv("disable, enable oneshot")
                 existing_value = self._translateResultStr(existing_once, "4", "5")
-            elif incoming_value.startswith("on"):
+            elif incoming_value.lower().startswith("on"):
                 display.vv("rule value found")
                 existing_value = existing_rules
         elif (command.startswith('SetOption')):
