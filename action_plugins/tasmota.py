@@ -126,16 +126,20 @@ class ActionModule(ActionBase):
 
         if (command.startswith('Rule')):
             display.vv("rule found!")
-            existing_once = data.get("Once")
-            existing_rules = data.get("Rules")
             existing_rule = data.get(command)
-            existing_stop_on_error = data.get("StopOnError")
+            existing_state = existing_rule.get("State")
+            existing_once = existing_rule.get("Once")
+            existing_rules = existing_rule.get("Rules")
+            existing_stop_on_error = existing_rule.get("StopOnError")
             if str(incoming_value) in ["0","1","2"]:
                 display.vv("disable, enable, toggle rule found")
-                existing_value = self._translateResultStr(existing_value)
-            elif str(incoming_value) in ["4","5"]:
-                display.vv("disable, enable oneshot")
+                existing_value = self._translateResultStr(existing_state)
+            elif str(incoming_value) in ["4","5","6"]:
+                display.vv("disable, enable, toggle oneshot")
                 existing_value = self._translateResultStr(existing_once, "4", "5")
+            elif str(incoming_value) in ["8","9","10"]:
+                display.vv("disable, enable, toggle stop-on-error")
+                existing_value = self._translateResultStr(existing_stop_on_error, "8", "9")
             elif str(incoming_value).lower().startswith("on"):
                 display.vv("rule value found")
                 existing_value = existing_rules
@@ -248,8 +252,7 @@ class ActionModule(ActionBase):
         ret = self._templar.template(ret)
         if is_required and ret == None:
             raise AnsibleOptionsError("parameter %s is required" % name)
-        else:
-            return ret
+        return ret
 
     def _translateResultStr(self, translate, offValue = "0", onValue = "1"):
       if (translate == "OFF"):
