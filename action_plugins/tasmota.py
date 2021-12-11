@@ -130,13 +130,13 @@ class ActionModule(ActionBase):
             existing_rules = data.get("Rules")
             existing_rule = data.get(command)
             existing_stop_on_error = data.get("StopOnError")
-            if incoming_value in ["0","1","2"]:
+            if str(incoming_value) in ["0","1","2"]:
                 display.vv("disable, enable, toggle rule found")
                 existing_value = self._translateResultStr(existing_value)
-            elif incoming_value in ["4","5"]:
+            elif str(incoming_value) in ["4","5"]:
                 display.vv("disable, enable oneshot")
                 existing_value = self._translateResultStr(existing_once, "4", "5")
-            elif incoming_value.lower().startswith("on"):
+            elif str(incoming_value).lower().startswith("on"):
                 display.vv("rule value found")
                 existing_value = existing_rules
         elif (command.startswith('SetOption')):
@@ -249,7 +249,7 @@ class ActionModule(ActionBase):
         if is_required and ret == None:
             raise AnsibleOptionsError("parameter %s is required" % name)
         else:
-            return str(ret)
+            return ret
 
     def _translateResultStr(self, translate, offValue = "0", onValue = "1"):
       if (translate == "OFF"):
