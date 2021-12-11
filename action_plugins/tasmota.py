@@ -212,6 +212,8 @@ class ActionModule(ActionBase):
                 # encode json if required
                 if isinstance(incoming_value, dict):
                     change_params.update( { 'cmnd' : ("%s %s" % (command, json.dumps(incoming_value))) } )
+                elif incoming_value == '':
+                    change_params.update( { 'cmnd' : ("%s \"\"" % (command)) } )
                 else:
                     change_params.update( { 'cmnd' : ("%s %s" % (command, incoming_value)) } )
 
