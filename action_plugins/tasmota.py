@@ -127,7 +127,25 @@ class ActionModule(ActionBase):
         if (command.startswith('Rule')):
             display.vv("rule found!")
             existing_rule = data.get(command)
-            existing_state = existing_rule.get("State")
+            if isinstance(existing_rule, dict):
+                # tasmota version >= 10.0.0
+                # example: {"Rule1":{"State":"OFF",
+                #                    "Once":"OFF",
+                #                    "StopOnError":"OFF",
+                #                    "Length":3,
+                #                    "Free":508,
+                #                    "Rules":"..."}}
+                existing_state = existing_rule.get("State")
+            else:
+                # tasmota version < 10.0.0
+                # example: {"Rule1":"OFF",
+                #           "Once":"OFF",
+                #           "StopOnError":"OFF",
+                #           "Length":3,
+                #           "Free":508,
+                #           "Rules":"..."}}
+                existing_state = existing_value
+                existing_rule = data
             existing_once = existing_rule.get("Once")
             existing_rules = existing_rule.get("Rules")
             existing_stop_on_error = existing_rule.get("StopOnError")
