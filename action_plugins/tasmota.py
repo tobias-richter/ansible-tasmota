@@ -126,17 +126,39 @@ class ActionModule(ActionBase):
 
         if (command.startswith('Rule')):
             display.vv("rule found!")
-            existing_once = data.get("Once")
-            existing_rules = data.get("Rules")
             existing_rule = data.get(command)
-            existing_stop_on_error = data.get("StopOnError")
-            if incoming_value in ["0","1","2"]:
+            if isinstance(existing_rule, dict):
+                # tasmota version >= 10.0.0
+                # example: {"Rule1":{"State":"OFF",
+                #                    "Once":"OFF",
+                #                    "StopOnError":"OFF",
+                #                    "Length":3,
+                #                    "Free":508,
+                #                    "Rules":"..."}}
+                existing_state = existing_rule.get("State")
+            else:
+                # tasmota version < 10.0.0
+                # example: {"Rule1":"OFF",
+                #           "Once":"OFF",
+                #           "StopOnError":"OFF",
+                #           "Length":3,
+                #           "Free":508,
+                #           "Rules":"..."}}
+                existing_state = existing_value
+                existing_rule = data
+            existing_once = existing_rule.get("Once")
+            existing_rules = existing_rule.get("Rules")
+            existing_stop_on_error = existing_rule.get("StopOnError")
+            if str(incoming_value) in ["0","1","2"]:
                 display.vv("disable, enable, toggle rule found")
-                existing_value = self._translateResultStr(existing_value)
-            elif incoming_value in ["4","5"]:
-                display.vv("disable, enable oneshot")
+                existing_value = self._translateResultStr(existing_state)
+            elif str(incoming_value) in ["4","5","6"]:
+                display.vv("disable, enable, toggle oneshot")
                 existing_value = self._translateResultStr(existing_once, "4", "5")
-            elif incoming_value.lower().startswith("on"):
+            elif str(incoming_value) in ["8","9","10"]:
+                display.vv("disable, enable, toggle stop-on-error")
+                existing_value = self._translateResultStr(existing_stop_on_error, "8", "9")
+            elif str(incoming_value).lower().startswith("on"):
                 display.vv("rule value found")
                 existing_value = existing_rules
         elif (command.startswith('SetOption')):
@@ -212,6 +234,8 @@ class ActionModule(ActionBase):
                 # encode json if required
                 if isinstance(incoming_value, dict):
                     change_params.update( { 'cmnd' : ("%s %s" % (command, json.dumps(incoming_value))) } )
+                elif incoming_value == '':
+                    change_params.update( { 'cmnd' : ("%s \"\"" % (command)) } )
                 else:
                     change_params.update( { 'cmnd' : ("%s %s" % (command, incoming_value)) } )
 
@@ -246,8 +270,7 @@ class ActionModule(ActionBase):
         ret = self._templar.template(ret)
         if is_required and ret == None:
             raise AnsibleOptionsError("parameter %s is required" % name)
-        else:
-            return str(ret)
+        return ret
 
     def _translateResultStr(self, translate, offValue = "0", onValue = "1"):
       if (translate == "OFF"):
