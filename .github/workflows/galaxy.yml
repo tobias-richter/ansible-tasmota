@@ -1,0 +1,24 @@
+name: Ansible Galaxy import
+
+on:
+  push:
+    branches: [ master ]
+  create:
+    tags:
+  release:
+    types:
+      - published
+
+jobs:
+  galaxy:
+    name: ansible-galaxy import
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Trigger a new import on Galaxy.
+      uses: robertdebock/galaxy-action@1.2.1
+      with:
+        galaxy_api_key: ${{ secrets.GALAXY_API_KEY }}
+
+        

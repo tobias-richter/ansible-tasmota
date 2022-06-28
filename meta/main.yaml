@@ -5,18 +5,18 @@ galaxy_info:
   author: Tobias Richter
   description: Ansible Role for managing tasmota devices with tasmota commands.
   license: Apache
-  min_ansible_version: 2.7
+  min_ansible_version: "2.9"
 
   platforms:
     - name: GenericBSD
       versions:
-        - any
+        - all
     - name: GenericLinux
       versions:
-        - any
+        - all
     - name: GenericUNIX
       versions:
-        - any
+        - all
 
   galaxy_tags:
     - tasmota
