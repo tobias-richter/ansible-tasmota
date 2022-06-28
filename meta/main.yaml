@@ -1,7 +1,6 @@
 ---
 galaxy_info:
   role_name: tasmota
-  namespace: tobias_richter
   author: Tobias Richter
   description: Ansible Role for managing tasmota devices with tasmota commands.
   license: Apache

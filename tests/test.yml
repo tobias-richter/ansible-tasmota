@@ -2,4 +2,4 @@
 - name: test role syntax
   hosts: test
   roles:
-    - tobias_richter.tasmota
+    - ansible-tasmota
