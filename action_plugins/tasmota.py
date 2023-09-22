@@ -221,6 +221,8 @@ class ActionModule(ActionBase):
                 existing_value = "%s,%s" % (data[command]['Min'],data[command]['Max'])
             except Exception as e:
                 raise AnsibleRuntimeError("Invalid response payload: %s, error: %s" % (data, e))
+        elif command.startswith('PulseTime'):
+            existing_value = unicode(data[command]['Set'])
 
         display.v("[%s] command: %s,\n\t existing_value: '%s',\n\t incoming_value: '%s'" % (tasmota_host, command, existing_value, incoming_value if not no_log else ""))
 
@@ -273,9 +275,9 @@ class ActionModule(ActionBase):
         return ret
 
     def _translateResultStr(self, translate, offValue = "0", onValue = "1"):
-      if (translate == "OFF"):
-        return offValue
-      if (translate == "ON"):
-        return onValue
-      return translate
+        if (translate == "OFF"):
+            return offValue
+        if (translate == "ON"):
+            return onValue
+        return translate
 
