@@ -150,3 +150,4 @@ Sets the `TelePeriod` to 10 seconds to all devices specified in the `tasmota` ho
 ## License
 
 Apache 2.0
+ 
