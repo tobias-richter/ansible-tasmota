@@ -45,6 +45,7 @@ Available variables are listed below, along with their default values:
         tasmota_mqtt_client: ''
         tasmota_mqtt_topic: ''
         tasmota_mqtt_fulltopic: ''
+        tasmota_mqtt_no_log: true
    
 If tasmota_user and tasmota password are both non-empty, they will be included in the commands to authenticate access.
 
