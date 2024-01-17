@@ -21,4 +21,4 @@
     (tasmota_mqtt_user + tasmota_mqtt_password + tasmota_mqtt_host + tasmota_mqtt_port +
     tasmota_mqtt_client + tasmota_mqtt_topic + tasmota_mqtt_fulltopic)
     | length > 0
-  no_log: true
+  no_log: "{{ tasmota_mqtt_no_log }}"
