@@ -106,7 +106,10 @@ class ActionModule(ActionBase):
         status_params.update( {'cmnd' : command } )
 
         # execute command
-        status_response = requests.get(url = endpoint_uri, params = status_params)
+        try:
+            status_response = requests.get(url = endpoint_uri, params = status_params, timeout=10)
+        except:
+            status_response = requests.get(url = endpoint_uri, params = status_params, timeout=10)
         # get response data
         data = status_response.json()
         display.v("data: %s, response code: %s" % (data, status_response.status_code))
@@ -241,7 +244,10 @@ class ActionModule(ActionBase):
                 else:
                     change_params.update( { 'cmnd' : ("%s %s" % (command, incoming_value)) } )
 
-                change_response = requests.get(url = endpoint_uri, params = change_params)
+                try:
+                    change_response = requests.get(url = endpoint_uri, params = change_params, timeout=10)
+                except:
+                    change_response = requests.get(url = endpoint_uri, params = change_params, timeout=10)
                 if status_response.status_code != 200:
                     raise AnsibleRuntimeError("Unexpected response code: %s" % (status_response.status_code))
 
