@@ -192,6 +192,7 @@ class ActionModule(ActionBase):
             existing_offset = existing_data.get("Offset")
             existing_week = existing_data.get("Week")
             existing_value = "%s,%s,%s,%s,%s,%s" % (existing_hemisphere, existing_week, existing_month, existing_day, existing_hour, existing_offset)
+            incoming_value = incoming_value.replace(' ','')
         elif (command == 'TuyaMCU'):
             # Return only relevant subset of fn/dp ids, ignoring the rest
             try:
@@ -226,6 +227,16 @@ class ActionModule(ActionBase):
                 raise AnsibleRuntimeError("Invalid response payload: %s, error: %s" % (data, e))
         elif command.startswith('PulseTime'):
             existing_value = unicode(data[command]['Set'])
+        elif command.startswith('WifiConfig'):
+            existing_value = list(data[command].keys())[0]
+        elif command.startswith('SaveData'):
+            if data[command] == "OFF":
+                existing_value = "0"
+            elif data[command] == "ON":
+                existing_value = "1"
+            else:
+                match = re.search("(\d+)", data[command])
+                existing_value = match.group()
 
         display.v("[%s] command: %s,\n\t existing_value: '%s',\n\t incoming_value: '%s'" % (tasmota_host, command, existing_value, incoming_value if not no_log else ""))
 
