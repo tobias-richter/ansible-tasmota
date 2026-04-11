@@ -99,17 +99,15 @@ class ActionModule(ActionBase):
 
         # Enable retries due to reboot of the devices
         session = requests.Session()
-        session.mount("http://%s" % (tasmota_host), HTTPAdapter(Retry(total=5, backoff_factor=1.0)))
+        session.mount("http://%s" % tasmota_host, HTTPAdapter(max_retries=Retry(total=5, backoff_factor=1.0)))
 
         endpoint_uri = "http://%s/cm" % (tasmota_host)
         status_params = copy.deepcopy(auth_params)
         status_params.update( {'cmnd' : command } )
 
         # execute command
-        try:
-            status_response = requests.get(url = endpoint_uri, params = status_params, timeout=10)
-        except:
-            status_response = requests.get(url = endpoint_uri, params = status_params, timeout=10)
+        status_response = session.get(url=endpoint_uri, params=status_params, timeout=10)
+
         # get response data
         data = status_response.json()
         display.v("data: %s, response code: %s" % (data, status_response.status_code))
@@ -255,12 +253,11 @@ class ActionModule(ActionBase):
                 else:
                     change_params.update( { 'cmnd' : ("%s %s" % (command, incoming_value)) } )
 
-                try:
-                    change_response = requests.get(url = endpoint_uri, params = change_params, timeout=10)
-                except:
-                    change_response = requests.get(url = endpoint_uri, params = change_params, timeout=10)
-                if status_response.status_code != 200:
-                    raise AnsibleRuntimeError("Unexpected response code: %s" % (status_response.status_code))
+                change_response = session.get(url=endpoint_uri, params=change_params, timeout=10)
+                if change_response.status_code != 200:
+                    raise AnsibleRuntimeError("Unexpected response code: %s" % change_response.status_code)
+
+                display.v(f"Change response: {change_response.json()}")
 
         if warnings:
             display.warning(warnings)
