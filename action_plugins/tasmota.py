@@ -173,11 +173,14 @@ class ActionModule(ActionBase):
         elif (command == 'Module'):
             modules_ids = data.get(command).keys()
             existing_value = next(iter(modules_ids))
-        elif (command.startswith('Gpio')):
+        elif command.lower().startswith('gpio'):
             gpios = data.get(command.upper()).keys()
             existing_value = next(iter(gpios))
         elif (command == 'Template'):
             existing_value = data
+            if isinstance(incoming_value, str):
+                # existing_value is a dict, parse the incoming_value to a dict as well
+                incoming_value = json.loads(incoming_value)
         elif (command.startswith('Timers')):
             existing_value = self._translateResultStr(data.get('Timers'))
         elif (re.findall('Timer\d', command)):
@@ -242,7 +245,7 @@ class ActionModule(ActionBase):
 
         display.v("[%s] existing_uri: %s" % (tasmota_host, endpoint_uri))
 
-        if existing_value != incoming_value:
+        if str(existing_value) != str(incoming_value):
             changed = True
 
             if not check_mode:
