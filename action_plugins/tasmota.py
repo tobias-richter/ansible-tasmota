@@ -61,10 +61,10 @@ class ActionModule(ActionBase):
         no_log = self._play_context.no_log
 
         if not no_log:
-          display.v("args: %s" % (self._task.args))
+          display.v("args: %s" % self._task.args)
 
         check_mode = task_vars['ansible_check_mode']
-        display.v("check_mode: %s" % (check_mode))
+        display.v("check_mode: %s" % check_mode)
 
         try:
             # Get the tasmota host
@@ -81,19 +81,19 @@ class ActionModule(ActionBase):
               return result
 
         except Exception as err:
-            display.v("got an exception: %s" % (err))
-            display.v("got an exception: "+err.message)
-            return self._fail_result(result, "error during retrieving parameter '%s'" % (err.message))
+            display.v("got an exception: %s" % err)
+            display.v("got an exception: " + err.message)
+            return self._fail_result(result, "error during retrieving parameter '%s'" % err.message)
 
         if not no_log:
-            display.v("incoming_value %s" % (incoming_value))
+            display.v("incoming_value %s" % incoming_value)
 
         auth_params = {}
         try:
             user = self._get_arg_or_var("tasmota_user")
             password = self._get_arg_or_var('tasmota_password')
             auth_params = { 'user' : user, 'password' : password }
-            display.v("authentication parameters: %s" % (auth_params))
+            display.v("authentication parameters: %s" % auth_params)
         except:
             pass
 
@@ -101,7 +101,7 @@ class ActionModule(ActionBase):
         session = requests.Session()
         session.mount("http://%s" % tasmota_host, HTTPAdapter(max_retries=Retry(total=5, backoff_factor=1.0)))
 
-        endpoint_uri = "http://%s/cm" % (tasmota_host)
+        endpoint_uri = "http://%s/cm" % tasmota_host
         status_params = copy.deepcopy(auth_params)
         status_params.update( {'cmnd' : command } )
 
@@ -121,11 +121,11 @@ class ActionModule(ActionBase):
             warnings.append(resp_warn)
 
         if status_response.status_code != 200:
-            raise AnsibleRuntimeError("Unexpected response code: %s" % (status_response.status_code))
+            raise AnsibleRuntimeError("Unexpected response code: %s" % status_response.status_code)
 
         existing_value = unicode(data.get(command))
 
-        if (command.startswith('Rule')):
+        if command.startswith('Rule'):
             display.vv("rule found!")
             existing_rule = data.get(command)
             if isinstance(existing_rule, dict):
@@ -152,40 +152,40 @@ class ActionModule(ActionBase):
             existing_stop_on_error = existing_rule.get("StopOnError")
             if str(incoming_value) in ["0","1","2"]:
                 display.vv("disable, enable, toggle rule found")
-                existing_value = self._translateResultStr(existing_state)
+                existing_value = self._translate_result_str(existing_state)
             elif str(incoming_value) in ["4","5","6"]:
                 display.vv("disable, enable, toggle oneshot")
-                existing_value = self._translateResultStr(existing_once, "4", "5")
+                existing_value = self._translate_result_str(existing_once, "4", "5")
             elif str(incoming_value) in ["8","9","10"]:
                 display.vv("disable, enable, toggle stop-on-error")
-                existing_value = self._translateResultStr(existing_stop_on_error, "8", "9")
+                existing_value = self._translate_result_str(existing_stop_on_error, "8", "9")
             elif str(incoming_value).lower().startswith("on"):
                 display.vv("rule value found")
                 existing_value = existing_rules
-        elif (command.startswith('SetOption')):
-            existing_value = self._translateResultStr(existing_value)
+        elif command.startswith('SetOption'):
+            existing_value = self._translate_result_str(existing_value)
         elif re.fullmatch(r"so\d+", command):
             existing_value = unicode(self._translate_result_str(data[command.replace("so", "SetOption")]))
-        elif (command.startswith('PowerRetain')):
-            existing_value = self._translateResultStr(existing_value)
-        elif (command.startswith('SensorRetain')):
-            existing_value = self._translateResultStr(existing_value)
-        elif (command == 'Module'):
+        elif command.startswith('PowerRetain'):
+            existing_value = self._translate_result_str(existing_value)
+        elif command.startswith('SensorRetain'):
+            existing_value = self._translate_result_str(existing_value)
+        elif command == 'Module':
             modules_ids = data.get(command).keys()
             existing_value = next(iter(modules_ids))
         elif command.lower().startswith('gpio'):
             gpios = data.get(command.upper()).keys()
             existing_value = next(iter(gpios))
-        elif (command == 'Template'):
+        elif command == 'Template':
             existing_value = data
             if isinstance(incoming_value, str):
                 # existing_value is a dict, parse the incoming_value to a dict as well
                 incoming_value = json.loads(incoming_value)
-        elif (command.startswith('Timers')):
-            existing_value = self._translateResultStr(data.get('Timers'))
-        elif (re.findall('Timer\d', command)):
+        elif command.startswith('Timers'):
+            existing_value = self._translate_result_str(data.get('Timers'))
+        elif re.findall(r'Timer\d', command):
             existing_value = data.get(command)
-        elif (command == 'TimeStd' or command == 'TimeDst' ):
+        elif command == 'TimeStd' or command == 'TimeDst':
             display.vv("TimeStd/TimeDst found!")
             existing_data = data.get(command)
             existing_day = existing_data.get("Day")
@@ -196,7 +196,7 @@ class ActionModule(ActionBase):
             existing_week = existing_data.get("Week")
             existing_value = "%s,%s,%s,%s,%s,%s" % (existing_hemisphere, existing_week, existing_month, existing_day, existing_hour, existing_offset)
             incoming_value = incoming_value.replace(' ','')
-        elif (command == 'TuyaMCU'):
+        elif command == 'TuyaMCU':
             # Return only relevant subset of fn/dp ids, ignoring the rest
             try:
                 fn_id, dp_id = (int(x) for x in incoming_value.split(','))
@@ -223,7 +223,7 @@ class ActionModule(ActionBase):
                     existing_value = incoming_value
                 else:
                     existing_value = relevant_entries
-        elif (command == 'DimmerRange'):
+        elif command == 'DimmerRange':
             try:
                 existing_value = "%s,%s" % (data[command]['Min'],data[command]['Max'])
             except Exception as e:
@@ -238,8 +238,9 @@ class ActionModule(ActionBase):
             elif data[command] == "ON":
                 existing_value = "1"
             else:
-                match = re.search("(\d+)", data[command])
-                existing_value = match.group()
+                match = re.search(r"(\d+)", data[command])
+                if match:
+                    existing_value = match.group()
         elif any(command.startswith(entry) for entry in ["SysLog", "SerialLog", "Sleep"]):
             existing_value = unicode(list(data[command].keys())[0])
         elif command.lower().startswith("ssid"):
@@ -258,7 +259,7 @@ class ActionModule(ActionBase):
                 if isinstance(incoming_value, dict):
                     change_params.update( { 'cmnd' : ("%s %s" % (command, json.dumps(incoming_value))) } )
                 elif incoming_value == '':
-                    change_params.update( { 'cmnd' : ("%s \"\"" % (command)) } )
+                    change_params.update({ 'cmnd' : ("%s \"\"" % command)})
                 else:
                     change_params.update( { 'cmnd' : ("%s %s" % (command, incoming_value)) } )
 
@@ -269,8 +270,9 @@ class ActionModule(ActionBase):
                 display.v(f"Change response: {change_response.json()}")
 
         if warnings:
-            display.warning(warnings)
             result["warning"] = warnings
+            for warning in warnings:
+                display.warning(warning)
 
         result["changed"] = changed
         result["command"] = command
@@ -293,14 +295,15 @@ class ActionModule(ActionBase):
         display.v("%s, %s, %s" % (name, default, is_required))
         ret = self._task.args.get(name, self._task_vars.get(name, default))
         ret = self._templar.template(ret)
-        if is_required and ret == None:
+        if is_required and ret is None:
             raise AnsibleOptionsError("parameter %s is required" % name)
         return ret
 
-    def _translateResultStr(self, translate, offValue = "0", onValue = "1"):
-        if (translate == "OFF"):
-            return offValue
-        if (translate == "ON"):
-            return onValue
+    @staticmethod
+    def _translate_result_str(translate, off_value="0", on_value="1"):
+        if translate == "OFF":
+            return off_value
+        if translate == "ON":
+            return on_value
         return translate
 
