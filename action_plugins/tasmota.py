@@ -164,6 +164,8 @@ class ActionModule(ActionBase):
                 existing_value = existing_rules
         elif (command.startswith('SetOption')):
             existing_value = self._translateResultStr(existing_value)
+        elif re.fullmatch(r"so\d+", command):
+            existing_value = unicode(self._translate_result_str(data[command.replace("so", "SetOption")]))
         elif (command.startswith('PowerRetain')):
             existing_value = self._translateResultStr(existing_value)
         elif (command.startswith('SensorRetain')):
@@ -238,6 +240,10 @@ class ActionModule(ActionBase):
             else:
                 match = re.search("(\d+)", data[command])
                 existing_value = match.group()
+        elif any(command.startswith(entry) for entry in ["SysLog", "SerialLog", "Sleep"]):
+            existing_value = unicode(list(data[command].keys())[0])
+        elif command.lower().startswith("ssid"):
+            existing_value = unicode(data[command.lower().replace("ssid", "SSId")])
 
         display.v("[%s] command: %s,\n\t existing_value: '%s',\n\t incoming_value: '%s'" % (tasmota_host, command, existing_value, incoming_value if not no_log else ""))
 
